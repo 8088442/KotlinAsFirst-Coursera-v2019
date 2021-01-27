@@ -189,7 +189,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
+    stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key
 
 /**
  * Средняя
@@ -200,7 +201,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+    !chars.isEmpty() && word.toSet().containsAll(chars)
 
 /**
  * Средняя
@@ -214,7 +216,8 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> =
+    list.groupingBy { it }.eachCount().filter { it.value > 1 }
 
 /**
  * Средняя
@@ -225,7 +228,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean =
+    words.groupBy { it.toSet() }.size != words.size
 
 /**
  * Сложная
@@ -251,7 +255,35 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    var mm = mutableMapOf<String, Set<String>>()
+    var tmp = friends.map{
+        val tmp = it.value.toMutableSet()
+        for (s in it.value) {
+            if (friends[s] != null)
+                tmp.addAll(friends[s]!!)
+        }
+        it.key to tmp
+    }.associateTo(mm) {it}
+
+//    {
+//        val tmp = it.value.toMutableSet()
+//        for (s in it.value) {
+//            if (friends[s] != null)
+//                tmp.addAll(friends[s]!!)
+//        }
+//        mapOf(it.key to tmp)
+//    }
+
+    return mm;
+}
+
+fun collectHandshakes(src: Map<String, Set<String>>, dst: MutableSet<String>): Unit {
+    for (s in src) {
+
+    }
+}
+
 
 /**
  * Сложная
