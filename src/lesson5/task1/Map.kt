@@ -256,11 +256,34 @@ fun hasAnagrams(words: List<String>): Boolean =
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    var mm = mutableMapOf<String, Set<String>>()
+    var tmp = friends.map{
+        val tmp = it.value.toMutableSet()
+        for (s in it.value) {
+            if (friends[s] != null)
+                tmp.addAll(friends[s]!!)
+        }
+        it.key to tmp
+    }.associateTo(mm) {it}
 
-    var res = mutableMapOf<String, Set<String>>()
+//    {
+//        val tmp = it.value.toMutableSet()
+//        for (s in it.value) {
+//            if (friends[s] != null)
+//                tmp.addAll(friends[s]!!)
+//        }
+//        mapOf(it.key to tmp)
+//    }
 
-    return res;
+    return mm;
 }
+
+fun collectHandshakes(src: Map<String, Set<String>>, dst: MutableSet<String>): Unit {
+    for (s in src) {
+
+    }
+}
+
 
 /**
  * Сложная
