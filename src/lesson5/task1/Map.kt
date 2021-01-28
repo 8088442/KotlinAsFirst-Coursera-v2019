@@ -256,34 +256,18 @@ fun hasAnagrams(words: List<String>): Boolean =
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    var mm = mutableMapOf<String, Set<String>>()
-    var tmp = friends.map{
-        val tmp = it.value.toMutableSet()
-        for (s in it.value) {
-            if (friends[s] != null)
-                tmp.addAll(friends[s]!!)
+    val newMap = friends.values.flatten().union(friends.keys).associateWith { mutableSetOf<String>() }
+    for ((key, value) in newMap) {
+        val tmpSet = mutableSetOf<String>()
+        for (s in friends[key].orEmpty()) {
+            tmpSet.add(s)
+            tmpSet.addAll(friends[s].orEmpty() - key)
         }
-        it.key to tmp
-    }.associateTo(mm) {it}
-
-//    {
-//        val tmp = it.value.toMutableSet()
-//        for (s in it.value) {
-//            if (friends[s] != null)
-//                tmp.addAll(friends[s]!!)
-//        }
-//        mapOf(it.key to tmp)
-//    }
-
-    return mm;
-}
-
-fun collectHandshakes(src: Map<String, Set<String>>, dst: MutableSet<String>): Unit {
-    for (s in src) {
-
+        value.addAll(tmpSet)
     }
-}
 
+    return newMap;
+}
 
 /**
  * Сложная
@@ -302,7 +286,15 @@ fun collectHandshakes(src: Map<String, Set<String>>, dst: MutableSet<String>): U
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in 0..list.size - 2) {
+        for (j in i + 1 until list.size) {
+            if (list[i] + list[j] == number) return i to j
+        }
+    }
+
+    return -1 to -1
+}
 
 /**
  * Очень сложная
@@ -325,4 +317,5 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> =
+    treasures.filter { it.value.first <= capacity }.keys
