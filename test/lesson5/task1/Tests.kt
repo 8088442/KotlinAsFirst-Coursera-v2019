@@ -232,6 +232,9 @@ class Tests {
     @Test
     @Tag("Normal")
     fun canBuildFrom() {
+        assertTrue(canBuildFrom(listOf('a', 'x'), "a"))
+        assertTrue(canBuildFrom(emptyList(), ""))
+
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
@@ -289,6 +292,21 @@ class Tests {
                     "Marat" to setOf("Mikhail", "Sveta"),
                     "Sveta" to setOf("Marat"),
                     "Mikhail" to setOf("Sveta")
+                )
+            )
+        )
+        assertEquals(
+            mapOf(
+                "8" to setOf("1", "86"),
+                "1" to setOf("86"),
+                "0" to setOf("8", "1", "86"),
+                "86" to setOf()
+            ),
+            propagateHandshakes(
+                mapOf(
+                    "8" to setOf("1"),
+                    "1" to setOf("86"),
+                    "0" to setOf("8")
                 )
             )
         )
