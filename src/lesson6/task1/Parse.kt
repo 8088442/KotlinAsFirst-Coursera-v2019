@@ -2,6 +2,10 @@
 
 package lesson6.task1
 
+import java.time.DateTimeException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 /**
  * Пример
  *
@@ -69,7 +73,34 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.toLowerCase().split(" ")
+    if (parts.isEmpty() || parts.size < 3) return ""
+    return try {
+        val localDate = LocalDate.of(
+            parts[2].toInt(),
+            when (parts[1]) {
+                "января" -> 1
+                "февраля" -> 2
+                "марта" -> 3
+                "апреля" -> 4
+                "мая" -> 5
+                "июня" -> 6
+                "июля" -> 7
+                "августа" -> 8
+                "сентября" -> 9
+                "октября" -> 10
+                "ноября" -> 11
+                "декабря" -> 12
+                else -> 0
+            },
+            parts[0].toInt()
+        )
+        localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } catch (e: DateTimeException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +112,20 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.toLowerCase().split(".")
+    if (parts.isEmpty() || parts.size < 3) return ""
+    return try {
+        val localDate = LocalDate.of(
+            parts[2].toInt(),
+            parts[1].toInt(),
+            parts[0].toInt()
+        )
+        localDate.format(DateTimeFormatter.ofPattern("dd.MMMM.yyyy"))
+    } catch (e: DateTimeException) {
+        ""
+    }
+}
 
 /**
  * Средняя
