@@ -141,7 +141,11 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val strippedPhoneNumber = phone.replace("([ \\-])".toRegex(), "")
+    return if (!"^\\+?\\d*\\(?\\d+\\)?\\d+$".toRegex().matches(strippedPhoneNumber)) ""
+    else strippedPhoneNumber.replace("[()]".toRegex(), "")
+}
 
 /**
  * Средняя
@@ -153,7 +157,9 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int =
+    if (!"^( |-|%|\\d)*$".toRegex().matches(jumps)) -1
+    else jumps.split(" ").map { if (it in " %") -1 else it.toIntOrNull() ?: -1 }.max()!!
 
 /**
  * Сложная
@@ -166,7 +172,16 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var results = jumps.split(' ').zipWithNext()
+    var max = -1
+    for (result in results) {
+        var match = "[+\\-%]?".toRegex().matches(result.second)
+        max = if (match) kotlin.math.max(result.first.toInt(), max) else -1
+    }
+
+    return max
+}
 
 /**
  * Сложная
