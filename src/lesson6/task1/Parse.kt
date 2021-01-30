@@ -172,16 +172,13 @@ fun bestLongJump(jumps: String): Int =
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    var results = jumps.split(' ').zipWithNext()
-    var max = -1
-    for (result in results) {
-        var match = "[+\\-%]?".toRegex().matches(result.second)
-        max = if (match) kotlin.math.max(result.first.toInt(), max) else -1
-    }
+fun bestHighJump(jumps: String): Int =
+    jumps.split(' ')
+        .zipWithNext()
+        .filterIndexed { index, item -> index % 2 == 0 && item.second == "+" }
+        .map { it.first.toInt() }
+        .max() ?: -1
 
-    return max
-}
 
 /**
  * Сложная
