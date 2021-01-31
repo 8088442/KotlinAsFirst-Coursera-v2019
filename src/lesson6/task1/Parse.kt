@@ -5,6 +5,7 @@ package lesson6.task1
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Пример
@@ -114,15 +115,15 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.toLowerCase().split(".")
-    if (parts.isEmpty() || parts.size < 3) return ""
+    if (parts.isEmpty() || parts.size > 3) return ""
     return try {
         val localDate = LocalDate.of(
             parts[2].toInt(),
             parts[1].toInt(),
             parts[0].toInt()
         )
-        localDate.format(DateTimeFormatter.ofPattern("dd.MMMM.yyyy"))
-    } catch (e: DateTimeException) {
+        localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")))
+    } catch (e: Exception) {
         ""
     }
 }
@@ -189,7 +190,15 @@ fun bestHighJump(jumps: String): Int =
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (!"^([-+]\\d+)*".toRegex().matches(expression.replace(" ", ""))) throw IllegalArgumentException()
+    val split = expression.split(" ")
+    var sign = false
+    for (item in split) {
+        if ()
+    }
+    return 0
+}
 
 /**
  * Сложная
