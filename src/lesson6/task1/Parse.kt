@@ -5,6 +5,7 @@ package lesson6.task1
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Пример
@@ -114,15 +115,15 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.toLowerCase().split(".")
-    if (parts.isEmpty() || parts.size < 3) return ""
+    if (parts.isEmpty() || parts.size > 3) return ""
     return try {
         val localDate = LocalDate.of(
             parts[2].toInt(),
             parts[1].toInt(),
             parts[0].toInt()
         )
-        localDate.format(DateTimeFormatter.ofPattern("dd.MMMM.yyyy"))
-    } catch (e: DateTimeException) {
+        localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")))
+    } catch (e: Exception) {
         ""
     }
 }
