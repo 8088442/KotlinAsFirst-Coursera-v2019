@@ -191,13 +191,27 @@ fun bestHighJump(jumps: String): Int =
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (!"^([-+]\\d+)*".toRegex().matches(expression.replace(" ", ""))) throw IllegalArgumentException()
+    if (!"^\\d+([-+]\\d+)*".toRegex().matches(expression.replace(" ", ""))) throw IllegalArgumentException()
     val split = expression.split(" ")
-    var sign = false
+    var sign = '+'
+    var sum = 0
     for (item in split) {
-        if ()
+        when {
+            sign == '+' -> {
+                sum += item.toIntOrNull() ?: throw IllegalArgumentException()
+                sign = ' '
+            }
+            sign == '-' -> {
+                sum -= item.toIntOrNull() ?: throw IllegalArgumentException()
+                sign = ' '
+            }
+            sign == ' ' && (item == "+" || item == "-") -> {
+                sign = item.first()
+            }
+            else -> throw IllegalArgumentException()
+        }
     }
-    return 0
+    return sum
 }
 
 /**
@@ -209,7 +223,13 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val first = str.split(" ")
+        .zipWithNext()
+        .firstOrNull { it.first.equals(it.second, ignoreCase = true) }?.first
+    return str.indexOf("$first $first", ignoreCase = true)
+}
+
 
 /**
  * Сложная
