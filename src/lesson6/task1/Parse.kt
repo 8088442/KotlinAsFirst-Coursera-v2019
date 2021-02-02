@@ -245,7 +245,7 @@ fun firstDuplicateIndex(str: String): Int {
 fun mostExpensive(description: String): String =
     description.split("; ")
         .asSequence()
-        .filter { it.split(" ").size>=2 }
+        .filter { it.split(" ").size >= 2 }
         .map {
             val item = it.split(" ")
             item[0] to item[1]
@@ -320,4 +320,45 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    var result = IntArray(cells)
+    var cellPointer = cells / 2
+    var commandIndex = 0
+    var commandsCount = 0
+
+    while (commandIndex < commands.length && commandsCount < limit) {
+        when {
+            commands[commandIndex] == '>' -> {
+                cellPointer++
+                commandIndex++
+                commandsCount++
+            }
+            commands[commandIndex] == '<' -> {
+                cellPointer--
+                commandIndex++
+                commandsCount++
+            }
+
+            commands[commandIndex] == '+' -> {
+                result[cellPointer]++
+                commandIndex++
+                commandsCount++
+            }
+            commands[commandIndex] == '-' -> {
+                result[cellPointer]--
+                commandIndex++
+                commandsCount++
+            }
+
+            commands[commandIndex] == ' ' -> {
+                commandIndex++
+                commandsCount++
+            }
+
+            else -> {
+            }
+        }
+    }
+
+    return result.toList()
+}
