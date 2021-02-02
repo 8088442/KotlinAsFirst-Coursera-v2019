@@ -242,7 +242,16 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String =
+    description.split("; ")
+        .asSequence()
+        .filter { it.split(" ").size>=2 }
+        .map {
+            val item = it.split(" ")
+            item[0] to item[1]
+        }.maxBy {
+            it.second.toDouble()
+        }?.first ?: ""
 
 /**
  * Сложная
@@ -255,7 +264,25 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    return when {
+        roman.isEmpty() -> 0
+        roman.startsWith("M") -> 1000 + fromRoman(roman.removePrefix("M"))
+        roman.startsWith("CM") -> 900 + fromRoman(roman.removePrefix("CM"))
+        roman.startsWith("D") -> 500 + fromRoman(roman.removePrefix("D"))
+        roman.startsWith("CD") -> 400 + fromRoman(roman.removePrefix("CD"))
+        roman.startsWith("C") -> 100 + fromRoman(roman.removePrefix("C"))
+        roman.startsWith("XC") -> 90 + fromRoman(roman.removePrefix("XC"))
+        roman.startsWith("L") -> 50 + fromRoman(roman.removePrefix("L"))
+        roman.startsWith("XL") -> 40 + fromRoman(roman.removePrefix("XL"))
+        roman.startsWith("X") -> 10 + fromRoman(roman.removePrefix("X"))
+        roman.startsWith("IX") -> 9 + fromRoman(roman.removePrefix("IX"))
+        roman.startsWith("V") -> 5 + fromRoman(roman.removePrefix("V"))
+        roman.startsWith("IV") -> 4 + fromRoman(roman.removePrefix("IV"))
+        roman.startsWith("I") -> 1 + fromRoman(roman.removePrefix("I"))
+        else -> -1
+    }
+}
 
 /**
  * Очень сложная
