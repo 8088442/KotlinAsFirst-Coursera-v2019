@@ -355,8 +355,22 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 commandsCount++
             }
 
-            else -> {
+            commands[commandIndex] == '[' -> {
+                if (result[cellPointer] == 0) {
+                    var stack = 1
+                    while (stack > 0) {
+                        commandIndex++
+                        when (commands[commandIndex]) {
+                            '[' -> stack++
+                            ']' -> stack--
+                        }
+                    }
+                }
+                commandIndex++
+                commandsCount++
             }
+
+            else -> throw IllegalArgumentException()
         }
     }
 

@@ -54,8 +54,8 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    return substrings.associate { substring: String ->
-        substring to File(inputName).readText().windowedSequence(substring.length) { windowStr: CharSequence ->
+    return substrings.associateWith { substring ->
+        File(inputName).readText().windowedSequence(substring.length) { windowStr: CharSequence ->
             if (windowStr.toString().equals(substring, true)) 1 else 0
         }.sum()
     }
@@ -78,17 +78,22 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     for (line in File(inputName).readLines()) {
-        var newLine = ""
-        for (word in line.split(" ")) {
-            if (word.toLowerCase() in setOf("жюри", "брошюра", "парашют")) {
-                newLine += word
-            } else if (word.indexOfAny(charArrayOf('Ы', 'Я', 'Ю'), startIndex = 0, true) > 0) {
-
-            } else {
-                newLine += word
-            }
-        }
-        outputStream.write(newLine.trim())
+        outputStream.write(
+            "(\\b[А-Яа-я]*(([ЖЧШЩжчшщ][Ыы][А-Яа-я]*)|([ЖЧШЩжчшщ][Яя][А-Яа-я]*)|([ЖЧШЩжчшщ][Юю][А-Яа-я]*)))".toRegex()
+                .replace(line) {
+                    it.value.replace("[ЖЧШЩжчшщ][ЫыЯяЮю]".toRegex()) { matchResult ->
+                        when (matchResult.value[1]) {
+                            'Ы' -> matchResult.value[0] + "И"
+                            'ы' -> matchResult.value[0] + "и"
+                            'Я' -> matchResult.value[0] + "А"
+                            'я' -> matchResult.value[0] + "а"
+                            'Ю' -> matchResult.value[0] + "У"
+                            'ю' -> matchResult.value[0] + "у"
+                            else -> matchResult.value
+                        }
+                    }
+                }
+        )
         outputStream.newLine()
     }
     outputStream.close()
@@ -112,7 +117,11 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val lines = File(inputName).readLines()
+    val maxlen = lines.maxBy { it.length }
+
+    outputStream.close()
 }
 
 /**
