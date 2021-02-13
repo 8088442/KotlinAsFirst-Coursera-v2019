@@ -4,6 +4,7 @@ package lesson7.task1
 
 import java.io.File
 
+
 /**
  * Пример
  *
@@ -117,9 +118,13 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val outputStream = File(outputName).bufferedWriter()
-    val lines = File(inputName).readLines()
-    val maxlen = lines.maxBy { it.length }
+    val outputStream = File(outputName).printWriter()
+    val lines = File(inputName).readLines().map { it.trim() }
+    val maxlength = lines.maxBy { it.length }!!.length
+    for (line in lines) {
+        val margin = (maxlength - line.length) / 2
+        outputStream.println(" ".repeat(margin) + line)
+    }
 
     outputStream.close()
 }
