@@ -97,7 +97,7 @@ fun dateStrToDigit(str: String): String {
             },
             parts[0].toInt()
         )
-        localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+        localDate.format(DateTimeFormatter.ofPattern("dd.MM.y"))
     } catch (e: DateTimeException) {
         ""
     }
@@ -122,7 +122,7 @@ fun dateDigitToStr(digital: String): String {
             parts[1].toInt(),
             parts[0].toInt()
         )
-        localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")))
+        localDate.format(DateTimeFormatter.ofPattern("d MMMM y", Locale("ru")))
     } catch (e: Exception) {
         ""
     }
@@ -144,7 +144,7 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     val strippedPhoneNumber = phone.replace("([ \\-])".toRegex(), "")
-    return if (!"^\\+?\\d*\\(?\\d+\\)?\\d+$".toRegex().matches(strippedPhoneNumber)) ""
+    return if (!"^\\+?\\d*\\(?\\d+\\)?\\d*$".toRegex().matches(strippedPhoneNumber)) ""
     else strippedPhoneNumber.replace("[()]".toRegex(), "")
 }
 
